@@ -29,10 +29,13 @@ public class MasinaCommandServiceImpl implements MasinaCommandService {
     @Override
     public MasinaResponse createMasina(MasinaDto masinaDto) {
         Optional<Masina> optionalMasina = masinaRepository.findByMarcaAndCuloare(masinaDto.marca(), masinaDto.culoare());
+
         if(optionalMasina.isPresent()){
             throw new MasinaAlreadyExistsException();
         }
+
         Masina masina = this.masinaRepository.save(mapper.mapMasinaDtoToMasina(masinaDto));
+
         return mapper.mapMasinaToMasinaResponse(masina);
     }
 
@@ -55,16 +58,18 @@ public class MasinaCommandServiceImpl implements MasinaCommandService {
 
         return mapper.mapMasinaToMasinaResponse(existingMasina);
     }
-
     @Transactional
     @Override
     public MasinaResponse deleteMasinaByMarcaAndCuloare(String marca, String culoare) {
         Optional<Masina> optionalMasina = masinaRepository.findByMarcaAndCuloare(marca, culoare);
+
         if(!optionalMasina.isPresent()){
             throw new MasinaDoesntExistException();
         }
+
         Masina masinaToDelete = optionalMasina.get();
         this.masinaRepository.delete(masinaToDelete);
+
         return mapper.mapMasinaToMasinaResponse(masinaToDelete);
     }
 }

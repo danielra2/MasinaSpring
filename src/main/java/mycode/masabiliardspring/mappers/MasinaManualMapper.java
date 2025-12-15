@@ -16,6 +16,7 @@ public class MasinaManualMapper {
     public Masina mapMasinaDtoToMasina(MasinaDto dto) {
         Objects.requireNonNull(dto, "dto is null");
         var e = new Masina();
+        // Folosim sintaxa record: dto.marca()
         e.setMarca(trim(dto.marca()));
         e.setMarime(dto.marime());
         e.setCuloare(trim(dto.culoare()));

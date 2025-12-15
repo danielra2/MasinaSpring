@@ -1,16 +1,6 @@
 package mycode.masabiliardspring.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class MasinaMarcaCuloareInfo {
-
-    private String marca;
-    private String culoare;
-}
+public record MasinaMarcaCuloareInfo(
+        String marca,
+        String culoare
+) {}

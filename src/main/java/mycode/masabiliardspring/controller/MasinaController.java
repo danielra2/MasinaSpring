@@ -1,11 +1,7 @@
 package mycode.masabiliardspring.controller;
 
 import jakarta.validation.Valid;
-import mycode.masabiliardspring.dtos.MasinaDto;
-import mycode.masabiliardspring.dtos.MasinaIdMarcaCuloareListRequest;
-import mycode.masabiliardspring.dtos.MasinaMarcaCuloareListRequest;
-import mycode.masabiliardspring.dtos.MasinaResponse;
-import mycode.masabiliardspring.dtos.MasinaResponseListRequest;
+import mycode.masabiliardspring.dtos.*;
 import mycode.masabiliardspring.service.MasinaCommandService;
 import mycode.masabiliardspring.service.MasinaQuerryService;
 import org.springframework.http.HttpStatus;
