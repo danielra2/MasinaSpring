@@ -4,15 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MasinaResponse {
-
-        private Long id;
-        private String marca;
-        private int marime;
-        private String culoare;
+public class MasinaMarcaCuloareListRequest {
+    private List<MasinaMarcaCuloareInfo> masiniList;
 }

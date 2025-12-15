@@ -1,7 +1,6 @@
 package mycode.masabiliardspring.mappers;
 
-import mycode.masabiliardspring.dtos.MasinaResponse;
-import mycode.masabiliardspring.dtos.MasinaDto;
+import mycode.masabiliardspring.dtos.*;
 import mycode.masabiliardspring.model.Masina;
 import org.springframework.stereotype.Component;
 
@@ -11,49 +10,90 @@ import java.util.Objects;
 @Component
 public class MasinaManualMapper {
 
+    // ******************************************************
+    // Mapare 1: DTO -> Entitate (Pentru operatii CREATE/UPDATE)
+    // ******************************************************
+
     public Masina mapMasinaDtoToMasina(MasinaDto dto) {
         Objects.requireNonNull(dto, "dto is null");
         var e = new Masina();
-        e.setMarca(trim(dto.marca()));
-        e.setMarime(dto.marime());
-        e.setCuloare(trim(dto.culoare()));
+        e.setMarca(trim(dto.getMarca()));
+        e.setMarime(dto.getMarime()); // Folosim Marime
+        e.setCuloare(trim(dto.getCuloare()));
         return e;
     }
 
-    public MasinaDto mapMasinaToMasinaDto(Masina e) {
+    // ******************************************************
+    // Mapare 2: Entitate -> DTO (Pentru operatii READ/RESPONSE)
+    // ******************************************************
+
+    public MasinaResponse mapMasinaToMasinaResponse(Masina e) {
         Objects.requireNonNull(e, "entity is null");
-        return new MasinaDto(
-                nvl(e.getMarca()),
-                 e.getMarime(),
-                nvl(e.getCuloare())
-        );
+        return MasinaResponse.builder()
+                .id(e.getId())
+                .marca(nvl(e.getMarca()))
+                .marime(e.getMarime()) // Folosim Marime
+                .culoare(nvl(e.getCuloare()))
+                .build();
     }
 
-    //todo: maper de la masina la masinaCreateRequest
+    // ******************************************************
+    // Mapare 3: Listă de Entități -> Listă de DTO-uri (Pentru paginare/interogări)
+    // ******************************************************
 
-    public MasinaResponse mapMasinaToMasinaCreateResponse(Masina e){
-        Objects.requireNonNull(e,"entity is null");
-        return new MasinaResponse(
-                e.getId(),
-                nvl(e.getMarca()),
-                e.getMarime(),
-                nvl(e.getCuloare())
-        );
-    }
-
-    public List<Masina> mapMasiniDtoListToMasinaList(List<MasinaDto> list) {
+    // Pentru MasinaListResponsePageable (List<MasinaResponse>)
+    public List<MasinaResponse> mapMasinaListToResponseList(List<Masina> list) {
         if (list == null) return List.of();
-        return list.stream().filter(Objects::nonNull).map(this::mapMasinaDtoToMasina).toList();
+        return list.stream()
+                .filter(Objects::nonNull)
+                .map(this::mapMasinaToMasinaResponse)
+                .toList();
     }
 
-    public List<MasinaDto> mapperMasinaListToMasinaDtoList(List<Masina> list) {
+    // Pentru findByMarimeExact (returnează ID, Marca, Culoare)
+    public List<MasinaIdMarcaCuloareInfo> mapMasinaListToIdMarcaCuloareInfoList(List<Masina> list) {
         if (list == null) return List.of();
-        return list.stream().filter(Objects::nonNull).map(this::mapMasinaToMasinaDto).toList();
+        return list.stream()
+                .filter(Objects::nonNull)
+                .map(this::mapMasinaToIdMarcaCuloareInfo)
+                .toList();
     }
 
+    private MasinaIdMarcaCuloareInfo mapMasinaToIdMarcaCuloareInfo(Masina e) {
+        Objects.requireNonNull(e, "entity is null");
+        return MasinaIdMarcaCuloareInfo.builder()
+                .id(e.getId())
+                .marca(nvl(e.getMarca()))
+                .culoare(nvl(e.getCuloare()))
+                .build();
+    }
 
+    // Pentru findByCuloare (returnează Marca, Culoare)
+    public List<MasinaMarcaCuloareInfo> mapMasinaListToMarcaCuloareInfoList(List<Masina> list) {
+        if (list == null) return List.of();
+        return list.stream()
+                .filter(Objects::nonNull)
+                .map(this::mapMasinaToMarcaCuloareInfo)
+                .toList();
+    }
 
+    private MasinaMarcaCuloareInfo mapMasinaToMarcaCuloareInfo(Masina e) {
+        Objects.requireNonNull(e, "entity is null");
+        return MasinaMarcaCuloareInfo.builder()
+                .marca(nvl(e.getMarca()))
+                .culoare(nvl(e.getCuloare()))
+                .build();
+    }
 
-    private static String trim(String s) { return s == null ? null : s.trim(); }
-    private static String nvl(String s)   { return s == null ? "" : s; }
+    // ******************************************************
+    // Metode utilitare
+    // ******************************************************
+
+    private static String trim(String s) {
+        return s == null ? null : s.trim();
+    }
+
+    private static String nvl(String s) {
+        return s == null ? "" : s;
+    }
 }

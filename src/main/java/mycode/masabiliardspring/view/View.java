@@ -3,7 +3,6 @@ package mycode.masabiliardspring.view;
 import mycode.masabiliardspring.dtos.MasinaDto;
 import mycode.masabiliardspring.exceptions.MasinaAlreadyExistsException;
 import mycode.masabiliardspring.service.MasinaCommandService;
-import mycode.masabiliardspring.service.MasinaQuerryService;
 import org.springframework.stereotype.Component;
 
 import java.util.Scanner;
@@ -34,7 +33,7 @@ public class View {
             int choice=scanner.nextInt();
             switch (choice){
                 case 1:
-                    masinaQuerryService.getAllMasaBiliard();
+                    masinaQuerryService.();
                     break;
                 case 2:
                     viewDeleteCar();

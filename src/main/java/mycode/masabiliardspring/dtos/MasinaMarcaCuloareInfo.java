@@ -9,10 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MasinaResponse {
+public class MasinaMarcaCuloareInfo {
 
-        private Long id;
-        private String marca;
-        private int marime;
-        private String culoare;
+    private String marca;
+    private String culoare;
 }
