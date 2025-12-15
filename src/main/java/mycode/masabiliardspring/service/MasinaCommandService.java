@@ -11,4 +11,5 @@ public interface MasinaCommandService {
     List<MasinaListRequest> deleteAllByName(String name);
     MasinaResponse createMasina(MasinaDto masinaDto) throws MasinaAlreadyExistsException;
     MasinaResponse deleteMasinaByNameAndColor(MasinaDto masinaDto);
+
 }
