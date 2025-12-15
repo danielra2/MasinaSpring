@@ -1,15 +1,13 @@
 package mycode.masabiliardspring.service;
 
-import mycode.masabiliardspring.dtos.MasinaResponse;
 import mycode.masabiliardspring.dtos.MasinaDto;
-import mycode.masabiliardspring.dtos.MasinaListRequest;
+import mycode.masabiliardspring.dtos.MasinaResponse;
 import mycode.masabiliardspring.exceptions.MasinaAlreadyExistsException;
-
-import java.util.List;
+import mycode.masabiliardspring.exceptions.MasinaDoesntExistException;
 
 public interface MasinaCommandService {
-    List<MasinaListRequest> deleteAllByName(String name);
-    MasinaResponse createMasina(MasinaDto masinaDto) throws MasinaAlreadyExistsException;
-    MasinaResponse deleteMasinaByNameAndColor(MasinaDto masinaDto);
 
+    MasinaResponse createMasina(MasinaDto masinaDto) throws MasinaAlreadyExistsException;
+    MasinaResponse updateMasinaByMarcaAndCuloare(String currentMarca, String currentCuloare, MasinaDto newMasinaDto) throws MasinaDoesntExistException;
+    MasinaResponse deleteMasinaByMarcaAndCuloare(String marca, String culoare) throws MasinaDoesntExistException;
 }

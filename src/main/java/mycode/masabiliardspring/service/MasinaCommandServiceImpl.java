@@ -1,24 +1,24 @@
 package mycode.masabiliardspring.service;
 
 import jakarta.transaction.Transactional;
-import mycode.masabiliardspring.dtos.MasinaResponse;
 import mycode.masabiliardspring.dtos.MasinaDto;
-import mycode.masabiliardspring.dtos.MasinaListRequest;
+import mycode.masabiliardspring.dtos.MasinaResponse;
 import mycode.masabiliardspring.exceptions.MasinaAlreadyExistsException;
 import mycode.masabiliardspring.exceptions.MasinaDoesntExistException;
 import mycode.masabiliardspring.mappers.MasinaManualMapper;
 import mycode.masabiliardspring.model.Masina;
 import mycode.masabiliardspring.repository.MasinaRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Component
+@Service
 public class MasinaCommandServiceImpl implements MasinaCommandService {
 
-    private MasinaRepository masinaRepository;
-    private MasinaManualMapper mapper;
+    private final MasinaRepository masinaRepository;
+    private final MasinaManualMapper mapper;
 
     public MasinaCommandServiceImpl(MasinaRepository masinaRepository,MasinaManualMapper mapper){
         this.mapper=mapper;
@@ -27,37 +27,44 @@ public class MasinaCommandServiceImpl implements MasinaCommandService {
 
     @Transactional
     @Override
-    public List<MasinaListRequest> deleteAllByName(String name) {
-        List<Masina>masinaList=masinaRepository.getAllMasina();
-
-        return null;
-
-
-    }
-
-    @Transactional
-    @Override
-    public MasinaResponse createMasina(MasinaDto masinaDto) throws MasinaAlreadyExistsException {
-        Optional<Masina> optionalMasina=masinaRepository.getMasinasByMarcaAndCuloare(masinaDto.marca(), masinaDto.culoare());
+    public MasinaResponse createMasina(MasinaDto masinaDto) {
+        Optional<Masina> optionalMasina = masinaRepository.findByMarcaAndCuloare(masinaDto.marca(), masinaDto.culoare());
         if(optionalMasina.isPresent()){
             throw new MasinaAlreadyExistsException();
         }
-       Masina masina= this.masinaRepository.save(mapper.mapMasinaDtoToMasina(masinaDto));
-        return (mapper.mapMasinaToMasinaCreateResponse(masina));
+        Masina masina = this.masinaRepository.save(mapper.mapMasinaDtoToMasina(masinaDto));
+        return mapper.mapMasinaToMasinaResponse(masina);
     }
 
     @Transactional
     @Override
-    public MasinaResponse deleteMasinaByNameAndColor(MasinaDto masinaDto) throws MasinaDoesntExistException {
-        Optional<Masina>optionalMasina=masinaRepository.getMasinasByMarcaAndCuloare(masinaDto.marca(), masinaDto.culoare());
+    public MasinaResponse updateMasinaByMarcaAndCuloare(String currentMarca, String currentCuloare, MasinaDto newMasinaDto) {
+        Optional<Masina> optionalMasina = masinaRepository.findByMarcaAndCuloare(currentMarca, currentCuloare);
+
         if(!optionalMasina.isPresent()){
             throw new MasinaDoesntExistException();
         }
-        this.masinaRepository.delete(optionalMasina.get());
-        return (mapper.mapMasinaToMasinaCreateResponse(optionalMasina.get()));
 
+        Masina existingMasina = optionalMasina.get();
 
+        existingMasina.setMarca(newMasinaDto.marca());
+        existingMasina.setCuloare(newMasinaDto.culoare());
+        existingMasina.setMarime(newMasinaDto.marime());
+
+        existingMasina = masinaRepository.save(existingMasina);
+
+        return mapper.mapMasinaToMasinaResponse(existingMasina);
     }
 
-
+    @Transactional
+    @Override
+    public MasinaResponse deleteMasinaByMarcaAndCuloare(String marca, String culoare) {
+        Optional<Masina> optionalMasina = masinaRepository.findByMarcaAndCuloare(marca, culoare);
+        if(!optionalMasina.isPresent()){
+            throw new MasinaDoesntExistException();
+        }
+        Masina masinaToDelete = optionalMasina.get();
+        this.masinaRepository.delete(masinaToDelete);
+        return mapper.mapMasinaToMasinaResponse(masinaToDelete);
+    }
 }

@@ -1,6 +1,9 @@
 package mycode.masabiliardspring.mappers;
 
-import mycode.masabiliardspring.dtos.*;
+import mycode.masabiliardspring.dtos.MasinaDto;
+import mycode.masabiliardspring.dtos.MasinaIdMarcaCuloareInfo;
+import mycode.masabiliardspring.dtos.MasinaMarcaCuloareInfo;
+import mycode.masabiliardspring.dtos.MasinaResponse;
 import mycode.masabiliardspring.model.Masina;
 import org.springframework.stereotype.Component;
 
@@ -10,38 +13,25 @@ import java.util.Objects;
 @Component
 public class MasinaManualMapper {
 
-    // ******************************************************
-    // Mapare 1: DTO -> Entitate (Pentru operatii CREATE/UPDATE)
-    // ******************************************************
-
     public Masina mapMasinaDtoToMasina(MasinaDto dto) {
         Objects.requireNonNull(dto, "dto is null");
         var e = new Masina();
-        e.setMarca(trim(dto.getMarca()));
-        e.setMarime(dto.getMarime()); // Folosim Marime
-        e.setCuloare(trim(dto.getCuloare()));
+        e.setMarca(trim(dto.marca()));
+        e.setMarime(dto.marime());
+        e.setCuloare(trim(dto.culoare()));
         return e;
     }
 
-    // ******************************************************
-    // Mapare 2: Entitate -> DTO (Pentru operatii READ/RESPONSE)
-    // ******************************************************
-
     public MasinaResponse mapMasinaToMasinaResponse(Masina e) {
         Objects.requireNonNull(e, "entity is null");
-        return MasinaResponse.builder()
-                .id(e.getId())
-                .marca(nvl(e.getMarca()))
-                .marime(e.getMarime()) // Folosim Marime
-                .culoare(nvl(e.getCuloare()))
-                .build();
+        return new MasinaResponse(
+                e.getId(),
+                nvl(e.getMarca()),
+                e.getMarime(),
+                nvl(e.getCuloare())
+        );
     }
 
-    // ******************************************************
-    // Mapare 3: Listă de Entități -> Listă de DTO-uri (Pentru paginare/interogări)
-    // ******************************************************
-
-    // Pentru MasinaListResponsePageable (List<MasinaResponse>)
     public List<MasinaResponse> mapMasinaListToResponseList(List<Masina> list) {
         if (list == null) return List.of();
         return list.stream()
@@ -50,7 +40,6 @@ public class MasinaManualMapper {
                 .toList();
     }
 
-    // Pentru findByMarimeExact (returnează ID, Marca, Culoare)
     public List<MasinaIdMarcaCuloareInfo> mapMasinaListToIdMarcaCuloareInfoList(List<Masina> list) {
         if (list == null) return List.of();
         return list.stream()
@@ -61,14 +50,13 @@ public class MasinaManualMapper {
 
     private MasinaIdMarcaCuloareInfo mapMasinaToIdMarcaCuloareInfo(Masina e) {
         Objects.requireNonNull(e, "entity is null");
-        return MasinaIdMarcaCuloareInfo.builder()
-                .id(e.getId())
-                .marca(nvl(e.getMarca()))
-                .culoare(nvl(e.getCuloare()))
-                .build();
+        return new MasinaIdMarcaCuloareInfo(
+                e.getId(),
+                nvl(e.getMarca()),
+                nvl(e.getCuloare())
+        );
     }
 
-    // Pentru findByCuloare (returnează Marca, Culoare)
     public List<MasinaMarcaCuloareInfo> mapMasinaListToMarcaCuloareInfoList(List<Masina> list) {
         if (list == null) return List.of();
         return list.stream()
@@ -79,21 +67,12 @@ public class MasinaManualMapper {
 
     private MasinaMarcaCuloareInfo mapMasinaToMarcaCuloareInfo(Masina e) {
         Objects.requireNonNull(e, "entity is null");
-        return MasinaMarcaCuloareInfo.builder()
-                .marca(nvl(e.getMarca()))
-                .culoare(nvl(e.getCuloare()))
-                .build();
+        return new MasinaMarcaCuloareInfo(
+                nvl(e.getMarca()),
+                nvl(e.getCuloare())
+        );
     }
 
-    // ******************************************************
-    // Metode utilitare
-    // ******************************************************
-
-    private static String trim(String s) {
-        return s == null ? null : s.trim();
-    }
-
-    private static String nvl(String s) {
-        return s == null ? "" : s;
-    }
+    private static String trim(String s) { return s == null ? null : s.trim(); }
+    private static String nvl(String s)   { return s == null ? "" : s; }
 }

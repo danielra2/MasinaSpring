@@ -9,9 +9,8 @@ import java.util.Optional;
 
 @Repository
 public interface MasinaRepository extends JpaRepository<Masina, Long> {
-    Optional<Masina> findByNume(String nume);
-    List<Masina> findByVarsta(int varsta);
+
+    Optional<Masina> findByMarcaAndCuloare(String marca, String culoare);
+    List<Masina> findByMarime(int marime);
     List<Masina> findByCuloare(String culoare);
-    List<Masina>getAllMasina();
-    List<Masina>getMasinasByMarcaAndCuloare();
 }
