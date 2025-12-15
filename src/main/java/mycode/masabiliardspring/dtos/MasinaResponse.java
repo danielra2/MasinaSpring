@@ -1,18 +1,4 @@
 package mycode.masabiliardspring.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class MasinaResponse {
-
-        private Long id;
-        private String marca;
-        private int marime;
-        private String culoare;
+public record MasinaResponse() {
 }
