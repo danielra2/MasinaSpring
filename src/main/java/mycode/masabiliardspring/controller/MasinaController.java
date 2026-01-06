@@ -1,6 +1,7 @@
 package mycode.masabiliardspring.controller;
 
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import mycode.masabiliardspring.dtos.*;
 import mycode.masabiliardspring.service.MasinaCommandService;
 import mycode.masabiliardspring.service.MasinaQuerryService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/masini")
+@Slf4j
 public class MasinaController {
 
     private final MasinaQuerryService masinaQuerryService;
@@ -30,13 +32,17 @@ public class MasinaController {
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     public MasinaResponse createMasina(@Valid @RequestBody MasinaDto masinaDto) {
+        log.info("POST /api/masini/add - creare masina {} cu marimea {}", masinaDto.marca(), masinaDto.marime());
         return masinaCommandService.createMasina(masinaDto);
     }
 
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public MasinaResponseListRequest getAllMasini() {
-        return masinaQuerryService.getAllMasini();
+        log.info("GET /api/masini requested");
+        MasinaResponseListRequest response = masinaQuerryService.getAllMasini();
+        log.info("GET /api/masini - returnate {} rezultate", response.masinaResponseList().size());
+        return response;
     }
 
     @PutMapping("/{currentMarca}/{currentCuloare}")
@@ -45,6 +51,7 @@ public class MasinaController {
             @PathVariable String currentMarca,
             @PathVariable String currentCuloare,
             @Valid @RequestBody MasinaDto newMasinaDto) {
+        log.info("PUT /api/masini/{}/{} - actualizare catre {} {}", currentMarca, currentCuloare, newMasinaDto.marca(), newMasinaDto.culoare());
         return masinaCommandService.updateMasinaByMarcaAndCuloare(currentMarca, currentCuloare, newMasinaDto);
     }
 
@@ -53,18 +60,25 @@ public class MasinaController {
     public void deleteMasina(
             @PathVariable String marca,
             @PathVariable String culoare) {
+        log.info("DELETE /api/masini/delete/{}/{}", marca, culoare);
         masinaCommandService.deleteMasinaByMarcaAndCuloare(marca, culoare);
     }
 
     @GetMapping("/marime/{marimeExacta}")
     @ResponseStatus(HttpStatus.OK)
     public MasinaIdMarcaCuloareListRequest findByMarimeExact(@PathVariable int marimeExacta) {
-        return masinaQuerryService.findByMarimeExact(marimeExacta);
+        log.info("GET /api/masini/marime/{} requested", marimeExacta);
+        MasinaIdMarcaCuloareListRequest response = masinaQuerryService.findByMarimeExact(marimeExacta);
+        log.info("GET /api/masini/marime/{} - returnate {} rezultate", marimeExacta, response.masinaIdMarcaCuloareResponseList().size());
+        return response;
     }
 
     @GetMapping("/culoare/{culoare}")
     @ResponseStatus(HttpStatus.OK)
     public MasinaMarcaCuloareListRequest findByCuloare(@PathVariable String culoare) {
-        return masinaQuerryService.findByCuloare(culoare);
+        log.info("GET /api/masini/culoare/{} requested", culoare);
+        MasinaMarcaCuloareListRequest response = masinaQuerryService.findByCuloare(culoare);
+        log.info("GET /api/masini/culoare/{} - returnate {} rezultate", culoare, response.masinaMarcaCuloareResponseList().size());
+        return response;
     }
 }

@@ -7,7 +7,14 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity
-@Table(name="masa_biliard")
+@Table(name = "masa_biliard",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_marca_culoare", columnNames = {"marca", "culoare"})
+        },
+        indexes = {
+                @Index(name = "idx_marca_culoare", columnList = "marca, culoare")
+        }
+)
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString

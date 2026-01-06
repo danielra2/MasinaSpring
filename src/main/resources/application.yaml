@@ -21,5 +21,15 @@ spring:
         format_sql: true
     open-in-view: false
 
+    liquibase:
+      change-log: classpath:db/changelog/db.changelog-master.yaml
+
+    springdoc:
+      swagger-ui:
+        path: /swagger-ui/index.html
+        display-request-duration: true
+      api-docs:
+        path: /v3/api-docs
+
 server:
   port: 8087

@@ -1,6 +1,7 @@
 package mycode.masabiliardspring.service;
 
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import mycode.masabiliardspring.dtos.MasinaDto;
 import mycode.masabiliardspring.dtos.MasinaResponse;
 import mycode.masabiliardspring.exceptions.MasinaAlreadyExistsException;
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @Component
 @Service
+@Slf4j
 public class MasinaCommandServiceImpl implements MasinaCommandService {
 
     private final MasinaRepository masinaRepository;
