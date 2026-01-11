@@ -30,7 +30,7 @@ public class MasinaQuerryServiceImpl implements MasinaQuerryService {
     public MasinaIdMarcaCuloareListRequest findByMarimeExact(int marime) throws NoMasinaFoundException {
         List<Masina> masinaList = masinaRepository.findByMarime(marime);
 
-        if(masinaList.isEmpty()){
+        if (masinaList.isEmpty()) {
             throw new NoMasinaFoundException();
         }
 
