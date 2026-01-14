@@ -60,6 +60,7 @@ public class MasinaCommandServiceImpl implements MasinaCommandService {
 
         return mapper.mapMasinaToMasinaResponse(existingMasina);
     }
+
     @Transactional
     @Override
     public MasinaResponse deleteMasinaByMarcaAndCuloare(String marca, String culoare) {

@@ -1,10 +1,7 @@
 package mycode.masabiliardspring.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Entity
 @Table(name = "masa_biliard",
@@ -19,7 +16,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Data
-
+@Builder
 public class Masina {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -23,6 +23,15 @@ public class MasinaManualMapper {
         return e;
     }
 
+    public void updateMasinaFromDto(MasinaDto dto,Masina target){
+        Objects.requireNonNull(dto,"dto is nulll");
+        Objects.requireNonNull(target,"target is not null");
+        target.setCuloare(trim(dto.culoare()));
+        target.setMarime(dto.marime());
+        target.setMarca(trim(dto.marca()));
+    }
+
+
     public MasinaResponse mapMasinaToMasinaResponse(Masina e) {
         Objects.requireNonNull(e, "entity is null");
         return new MasinaResponse(

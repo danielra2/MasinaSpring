@@ -1,10 +1,7 @@
 package mycode.masabiliardspring.service;
 
 
-import mycode.masabiliardspring.dtos.MasinaIdMarcaCuloareInfo;
-import mycode.masabiliardspring.dtos.MasinaIdMarcaCuloareListRequest;
-import mycode.masabiliardspring.dtos.MasinaListRequest;
-import mycode.masabiliardspring.dtos.MasinaResponse;
+import mycode.masabiliardspring.dtos.*;
 import mycode.masabiliardspring.exceptions.MasinaDoesntExistException;
 import mycode.masabiliardspring.exceptions.NoMasinaFoundException;
 import mycode.masabiliardspring.mappers.MasinaManualMapper;
@@ -71,11 +68,6 @@ public class MasinaQueryServiceImplTest {
         assertThat(service.findByMarimeExact(4300).masiniList().contains(m9)).isTrue();
         assertThat(service.findByMarimeExact(4300).masiniList().contains(m10)).isTrue();
 
-
-
-
-
-
     }
     @Test
     void testfindByMarimeExact_whenRepositoryReturnsEmpty_thenThrowsNoMasinaFoundException(){
@@ -101,11 +93,11 @@ public class MasinaQueryServiceImplTest {
 
         when(repository.findByCuloare("Alb")).thenReturn(masinaList);
 
-        MasinaIdMarcaCuloareInfo m6 = new MasinaIdMarcaCuloareInfo(1L, "Dacia Logan", "Alb");
-        MasinaIdMarcaCuloareInfo m7 = new MasinaIdMarcaCuloareInfo(2L, "Toyota Corolla", "Albastru");
-        MasinaIdMarcaCuloareInfo m8 = new MasinaIdMarcaCuloareInfo(3L, "BMW Seria 3", "Negru");
-        MasinaIdMarcaCuloareInfo m9 = new MasinaIdMarcaCuloareInfo(4L, "Volkswagen Golf", "Gri");
-        MasinaIdMarcaCuloareInfo m10 = new MasinaIdMarcaCuloareInfo(5L, "Tesla Model 3", "Rosu");
+        MasinaMarcaCuloareInfo m6 = new MasinaMarcaCuloareInfo( "Dacia Logan", "Alb");
+        MasinaMarcaCuloareInfo m7 = new MasinaMarcaCuloareInfo( "Toyota Corolla", "Albastru");
+        MasinaMarcaCuloareInfo m8 = new MasinaMarcaCuloareInfo( "BMW Seria 3", "Negru");
+        MasinaMarcaCuloareInfo m9 = new MasinaMarcaCuloareInfo( "Volkswagen Golf", "Gri");
+        MasinaMarcaCuloareInfo m10 = new MasinaMarcaCuloareInfo( "Tesla Model 3", "Rosu");
 
 
         assertThat(service.findByCuloare("Alb").masiniList().contains(m6)).isTrue();
@@ -114,9 +106,14 @@ public class MasinaQueryServiceImplTest {
         assertThat(service.findByCuloare("Alb").masiniList().contains(m9)).isTrue();
         assertThat(service.findByCuloare("Alb").masiniList().contains(m10)).isTrue();
 
-
-
     }
+
+    @Test
+    void testFindByCuloare_WhenRepositoryReturnsEmpty_ThenThrowsNoMasinaFoundException(){
+        when(repository.findByCuloare("Alb")).thenReturn(List.of());
+        assertThatThrownBy(()->service.findByCuloare("Alb")).isInstanceOf(NoMasinaFoundException.class);
+    }
+
 
 
 
