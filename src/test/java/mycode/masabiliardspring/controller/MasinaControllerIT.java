@@ -72,12 +72,10 @@ public class MasinaControllerIT {
     }
 
     @Test
-    void invalidSortParameterShouldReturnBadRequest()throws Exception{
-        repository.save(masina("Audi",10,"Alb"));
-        mockMvc.perform(get("/api/masini").param("gresit","greseala,greseli")).
-                andExpect(status().isBadRequest()).
-                andExpect(jsonPath("$.error")
-                        .value("Parametrii furnizati sunt invalizi"));
+    void invalidSortParameterShouldReturnBadRequest() throws Exception {
+        repository.save(new Masina(null, "Audi", 10, "Alb"));
+
+        mockMvc.perform(get("/api/masini").param("sort", "campInexistent,asc")).andExpect(status().isBadRequest()).andExpect(jsonPath("$.error").value("Parametrii furnizati sunt invalizi"));
     }
 
 }
